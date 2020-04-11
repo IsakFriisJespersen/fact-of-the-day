@@ -20,7 +20,6 @@ module.exports = {
     },
     getCommentByFactId: function (req, res) {
         const factId = req.params.factId
-
         Fact.findOne({
             _id: factId
         }, (err, fact) => {

@@ -1,18 +1,44 @@
 const FactSchema = require('../schemas/factSchema')
 const CommentSchema = require('../schemas/commentSchema')
 const mongoose = require('mongoose');
+const moment = require('moment')
 
 module.exports = {
 
     addMany: function (req, res) {
+        let momentDate = moment().format('YYYY-MM-DD');    
+        console.log(momentDate) 
         let data = req.body
-        
-        console.log(data)
+        const date = new Date()
+        const dateNow = date.getDate()
+        data = data.map((d, index) => {
+            date.setDate(dateNow + index)
+            return {
+                "fact": d.fact,
+                "meta": {
+                    "date": moment().add(index, 'days').format('YYYY-MM-DD')
+                }
+            }
+        })
         FactSchema.insertMany(data, (err, fact) => {
             if (err) return res.status(400).json(err)
             return res.status(200).json(fact)
         })
     },
+    getFactToday(req, res) {
+        const f = String(moment().format('YYYY-MM-DD'))
+        console.log()
+        FactSchema.find({
+                'meta.date': String(moment().format('YYYY-MM-DD'))
+                
+            },(err, fact) => {
+                if (err) return res.status(400).json(err)
+                return res.status(200).json(fact)
+            })
+
+
+    },
+
     addComment: function (req, res) {
         const commentText = req.body
         console.log(commentText)
