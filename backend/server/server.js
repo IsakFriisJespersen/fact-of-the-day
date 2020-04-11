@@ -11,6 +11,7 @@ var url = "mongodb://localhost:27017/";
 
 const dbName = "db_funfact"
 
+
 mongoose.connect(url + dbName, {
     useNewUrlParser: true
 });
@@ -19,17 +20,17 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function () {
     // we're connected!
-    console.log("Database " + dbName + "is connected!")
+    console.log("Database " + dbName + "is connected!!")
 });
 
 // RESTful Endpoints fact
 app.post('/fact/insert-many/', fact.addMany);
 app.post('/fact/create-comment/:factId', fact.addComment);
-app.get('/fact/get-by-factId/:factId', fact.getFact);
 app.put('/fact/update-up-votes/:factId', fact.updateVotesUp)
 app.put('/fact/update-down-votes/:factId', fact.updateVotesDown)
 app.get('/fact/sort-by-votesUp/', fact.sortByVotesUp)
 app.get('/fact/sort-by-votesDown/', fact.sortByVotesUp)
+app.get('/fact/get-todays-fact', fact.getFactToday);
 
 
 // RESTful Endpoint comment
