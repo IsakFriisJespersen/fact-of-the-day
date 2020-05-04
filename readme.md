@@ -10,10 +10,4 @@ Isak
 Sanna
 asdf
 
-<<<<<<< HEAD
-hello
-
-asdf
-=======
 Isak merge
->>>>>>> master
