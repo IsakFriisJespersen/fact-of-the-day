@@ -32,6 +32,7 @@ module.exports = {
                 'meta.date': String(moment().format('YYYY-MM-DD'))
                 
             },(err, fact) => {
+                console.log(fact)
                 if (err) return res.status(400).json(err)
                 return res.status(200).json(fact)
             })

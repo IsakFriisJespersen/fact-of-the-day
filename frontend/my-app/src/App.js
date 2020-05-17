@@ -15,7 +15,11 @@ class App extends React.Component {
                 }}>
                     <Header/>
                 </div>
-                <div>
+                <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}>
                     <Fact/>
                 </div>
             </div>
