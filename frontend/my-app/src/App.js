@@ -3,11 +3,23 @@ import Header from './components/header/header'
 import Fact from './components/fact/fact'
 // import logo from './logo.svg';
 import './App.css';
+const imgMyimageexample = require('../src/istockphoto-1138395421-612x612.jpg');
 
 class App extends React.Component {
+    
     render() {
         return (
-            <div>
+            <div style={{
+                backgroundImage: `url(${imgMyimageexample})`,
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center',
+                backgroundSize: 'cover',
+                backgroundRepeat: 'noRepeat',
+                width: '100vw',
+                height: '100vh'
+            }}>
+            <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"></link>
+            <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
                 <div style={{
                     display:'flex', 
                     alignItems:'flex-start'

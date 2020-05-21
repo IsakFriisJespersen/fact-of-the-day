@@ -35,6 +35,7 @@ app.put('/fact/update-down-votes/:factId', fact.updateVotesDown)
 app.get('/fact/sort-by-votesUp/', fact.sortByVotesUp)
 app.get('/fact/sort-by-votesDown/', fact.sortByVotesUp)
 app.get('/fact/get-todays-fact', fact.getFactToday);
+app.get('/fact/get-todays-fact-populate-comment', fact.getFactTodayPopulateComment);
 
 
 // RESTful Endpoint comment

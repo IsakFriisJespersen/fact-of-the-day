@@ -9,7 +9,7 @@ const fetch = require('node-fetch');
 module.exports = {
     getTodaysFact: async function () {
 
-      const resp = await fetch('http://192.168.0.195:8080/fact/get-todays-fact')
+      const resp = await fetch('http://192.168.0.195:8080/fact/get-todays-fact-populate-comment')
       .then(body => body.json())
       .catch(err => {
             console.log(err)
