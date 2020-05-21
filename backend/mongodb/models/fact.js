@@ -32,13 +32,28 @@ module.exports = {
                 'meta.date': String(moment().format('YYYY-MM-DD'))
                 
             },(err, fact) => {
+                console.log(fact)
                 if (err) return res.status(400).json(err)
                 return res.status(200).json(fact)
             })
 
 
     },
+    getFactTodayPopulateComment(req, res) {
+        const f = String(moment().format('YYYY-MM-DD'))
+        console.log()
+        FactSchema.find({
+                'meta.date': String(moment().format('YYYY-MM-DD'))
+                
+            }).populate('comments')
+            .exec((err, fact) => {
+                console.log(fact)
+                if (err) res.status(400).json(err)
+                return res.status(200).json(fact)
+            })
 
+
+    },
     addComment: function (req, res) {
         const commentText = req.body
         console.log(commentText)

@@ -2,11 +2,15 @@ const fact = require('../mongodb/models/fact')
 const comment = require('../mongodb/models/comment')
 const express = require('express')
 const app = express()
+const cors = require('cors')
 const port = 8080
 var MongoClient = require('mongodb').MongoClient;
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser')
+app.use(cors())
 app.use(bodyParser.json())
+
+app.use(express.static('public'))
 var url = "mongodb://localhost:27017/";
 
 const dbName = "db_funfact"
@@ -31,6 +35,7 @@ app.put('/fact/update-down-votes/:factId', fact.updateVotesDown)
 app.get('/fact/sort-by-votesUp/', fact.sortByVotesUp)
 app.get('/fact/sort-by-votesDown/', fact.sortByVotesUp)
 app.get('/fact/get-todays-fact', fact.getFactToday);
+app.get('/fact/get-todays-fact-populate-comment', fact.getFactTodayPopulateComment);
 
 
 // RESTful Endpoint comment
