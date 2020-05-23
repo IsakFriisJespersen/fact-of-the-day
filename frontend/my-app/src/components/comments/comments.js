@@ -1,20 +1,57 @@
 import React from 'react';
 import {Comment, Form, Button, Header} from 'semantic-ui-react'
+import io from 'socket.io-client'
 import './comments.css'
 
+const http = require('../../http/http')
+const socket = io(`http://localhost:8080`)
 class Comments extends React.Component {
+    
+    
     constructor(props){
         super(props)
         this.state = {
-            comments: this.props.comments
+            factId: this.props.factId,
+            data: {
+                comments: [],
+                isLoading: true
+            },
+            userComment: ""
         }
+        this.putComment = this.putComment.bind(this)
+        // this.commentsData = this.commentsData.bind(this)
     }
-    putComment(){
+    componentWillMount(){
+        http.getComments(this.props.factId)
+            .then(data => {
+                this.setState({
+                    data: {
+                        comments: data,
+                        isLoading: false
+                    }
+                })
+            })
+        socket.emit('comment', "hello1")
+        socket.emit('comment', "hello2")
+        socket.emit('comment', "hello3")
+        socket.on(`comment`, data => {
+            console.log(data)
+            })
+    }
 
+    putComment(){
+        const factId = this.state.factId
+        const userComment = this.state.userComment
+        http.putComment(factId, userComment)
     }
+
     render() {
-        const comments = this.state.comments
-        console.log(comments)
+
+        const {comments, isLoading} = this.state.data
+        if(isLoading){
+            return <h3>isLoading</h3>
+        }
+        // console.log(comments)
         return (
             <div>
                 <div>
@@ -26,8 +63,10 @@ class Comments extends React.Component {
                         Comments
                     </Header>
                         {
-                            comments.map(c => 
-                                <Comment>
+                            comments.map((c, index) => 
+                                <Comment
+                                key={index}
+                                >
                                     <Comment.Content>
                                         <Comment.Author>Hidden</Comment.Author>
                                         <Comment.Metadata><div>{c.meta.date}</div></Comment.Metadata>
@@ -37,7 +76,12 @@ class Comments extends React.Component {
                                 )
                         }
                         <Form reply>
-                            <Form.TextArea />
+                            <Form.TextArea 
+                            onChange = {(e) => {this.setState({
+                                userComment: e.target.value
+                            })}}
+                            
+                            />
                             <Button content='Add Reply' 
                             labelPosition='left' 
                             icon='edit'

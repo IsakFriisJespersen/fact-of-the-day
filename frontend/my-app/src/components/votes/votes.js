@@ -29,13 +29,15 @@ class Comment extends React.Component {
             <div
             style={{
                 alignItems: 'row'
-            }}>
+            }}
+            className=""
+            >
                 <button
                     className="btn btn-success glyphicon glyphicon-thumbs-up"
                     onClick = {this.putVotesUp}
                 >   {votesUp}</button>
                 <button
-                    class="btn btn-danger glyphicon glyphicon-thumbs-down"
+                    className="btn btn-danger glyphicon glyphicon-thumbs-down"
                     onClick = {this.putVotesDown}
                 >   {votesDown}</button>
             </div>

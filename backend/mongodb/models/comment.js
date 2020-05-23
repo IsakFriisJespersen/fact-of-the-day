@@ -20,22 +20,22 @@ module.exports = {
     },
     getCommentByFactId: function (req, res) {
         const factId = req.params.factId
-        Fact.findOne({
-            _id: factId
-        }, (err, fact) => {
+        console.log(factId)
+        Comment.find(
+            {
+                fact: factId
+            },
+        (err, result) => {
             if (err) return res.status(400).json(err)
-            Comment.find()
-                .where('_id')
-                .in(fact)
-                .exec((err, records) => {
-                    if(err) return res.status(400).json(err)
-                    return res.status(200).json(err)
-                });
+            return res.status(200).json(result)
         })
+ 
     },
+
+
     updateCommentVotesUp: function (req, res) {
         const factId = req.params.factId
-        FactSchema.findByIdAndUpdate({
+        Fact.findByIdAndUpdate({
                 _id: factId
             }, {
                 $inc: {
@@ -49,7 +49,7 @@ module.exports = {
     },
     updateCommentVotesDown: function (req, res) {
         const factId = req.params.factId
-        FactSchema.findByIdAndUpdate({
+        Fact.findByIdAndUpdate({
                 _id: factId
             }, {
                 $: {

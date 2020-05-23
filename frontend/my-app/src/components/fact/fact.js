@@ -45,7 +45,8 @@ class Fact extends React.Component {
                 </div>
                 <div>
                     <Comments
-                        comments = {data['comments']}
+                        // comments = {data['comments']}
+                        factId = {data['_id']}
                     />
                 </div>
 

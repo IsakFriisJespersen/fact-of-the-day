@@ -9,12 +9,12 @@ var mongoose = require('mongoose');
 var bodyParser = require('body-parser')
 app.use(cors())
 app.use(bodyParser.json())
-
 app.use(express.static('public'))
+const http = require('http').Server(app)
+const io = require("socket.io")(http);
+
 var url = "mongodb://localhost:27017/";
-
 const dbName = "db_funfact"
-
 
 mongoose.connect(url + dbName, {
     useNewUrlParser: true
@@ -26,6 +26,7 @@ db.once('open', function () {
     // we're connected!
     console.log("Database " + dbName + "is connected!!")
 });
+
 
 // RESTful Endpoints fact
 app.post('/fact/insert-many/', fact.addMany);
@@ -44,8 +45,12 @@ app.get('/comment/find-comment-by-factid/:factId', comment.getCommentByFactId);
 app.put('/comment/update-up-votes/:commentId', comment.updateCommentVotesUp)
 app.put('/comment/update-down-votes/:commentId', comment.updateCommentVotesDown)
 
+io.on('connection',function(socket){
+    socket.on('comment',function(data){
+        console.log(data)
+        io.emit('comment',data);  
+    });
+ 
+});
 
-
-
-
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+http.listen(port, () => console.log(`Example app listening on port ${port}!`))

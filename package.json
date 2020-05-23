@@ -20,6 +20,7 @@
     "mongodb": "^3.5.5",
     "mongoose": "^5.9.5",
     "npm-watch": "^0.6.0",
-    "react-bootstrap": "^1.0.1"
+    "react-bootstrap": "^1.0.1",
+    "socket.io": "^2.3.0"
   }
 }

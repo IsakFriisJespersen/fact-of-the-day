@@ -8,17 +8,37 @@ const fetch = require('node-fetch');
 
 module.exports = {
     getTodaysFact: async function () {
-
-      const resp = await fetch('http://192.168.0.195:8080/fact/get-todays-fact-populate-comment')
+      return await fetch('http://192.168.0.195:8080/fact/get-todays-fact-populate-comment')
       .then(body => body.json())
       .catch(err => {
             console.log(err)
             return "There is no fact today :("
       })
-      return await resp
-    
-
-
-    }
-
-}
+    },
+    putComment: async function (factId, userComment) {
+      const body = {
+        "body": userComment
+      }
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      }
+      return await fetch('http://192.168.0.195:8080/fact/create-comment/' + factId, options)
+      .then(body => body.json())
+      .catch(err => {
+            console.log(err)
+            return err
+      })
+    },
+    getComments: async function(factId){
+      return await fetch('http://192.168.0.195:8080/comment/find-comment-by-factid/' + factId)
+      .then(body => body.json())
+      .catch(err => {
+            console.log(err)
+            return "There is no fact today :("
+      })
+    },
+  }
