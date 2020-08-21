@@ -45,12 +45,29 @@ app.get('/comment/find-comment-by-factid/:factId', comment.getCommentByFactId);
 app.put('/comment/update-up-votes/:commentId', comment.updateCommentVotesUp)
 app.put('/comment/update-down-votes/:commentId', comment.updateCommentVotesDown)
 
+app.get('/sockets', () => {
+    io.emit('comment', "New MEssage")
+
+})
+
 io.on('connection',function(socket){
     socket.on('comment',function(data){
         console.log(data)
         io.emit('comment',data);  
     });
  
+});
+
+var clients = 0;
+io.on('connection', function(socket) {
+   clients++;
+   io.sockets.emit('broadcast',{ description: clients + ' clients connected!'});
+    socket.broadcast.emit("hi")
+
+   socket.on('disconnect', function () {
+      clients--;
+      io.sockets.emit('broadcast',{ description: clients + ' clients connected!'});
+   });
 });
 
 http.listen(port, () => console.log(`Example app listening on port ${port}!`))

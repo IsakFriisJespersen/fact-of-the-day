@@ -16,12 +16,14 @@ class Comments extends React.Component {
                 comments: [],
                 isLoading: true
             },
+            socketComment: [],
             userComment: ""
         }
         this.putComment = this.putComment.bind(this)
         // this.commentsData = this.commentsData.bind(this)
     }
     componentWillMount(){
+        console.log("componentWillMount")
         http.getComments(this.props.factId)
             .then(data => {
                 this.setState({
@@ -31,67 +33,101 @@ class Comments extends React.Component {
                     }
                 })
             })
-        socket.emit('comment', "hello1")
-        socket.emit('comment', "hello2")
-        socket.emit('comment', "hello3")
-        socket.on(`comment`, data => {
-            console.log(data)
-            })
-    }
+        
+        // socket.on(`comment`, data => {
+        //         this.state.socketComment.push(data)
+        // })
 
-    putComment(){
-        const factId = this.state.factId
+        socket.on('broadcast',function(data) {
+            // document.body.innerHTML = '';
+            // document.write(data.description);
+         });
+
+        }
+        
+    putComment = () => {
+        // const factId = this.state.factId
         const userComment = this.state.userComment
-        http.putComment(factId, userComment)
-    }
+        // http.putComment(factId, userComment)
+        socket.emit('comment', this.state.userComment)
+        this.setState(
+            state => {
+                const socketComment = state.socketComment.concat(userComment)
+                return {
+                    socketComment
+                }
+            }
+            )
+            
+            socket.on('connection', function(){
+               socket.on('comment',function(data){
+                   console.log(data)
+                   io.emit('comment',data);  
+               });
+            })
+        }
+        
+
+
 
     render() {
+        console.log("rendercomment")
 
         const {comments, isLoading} = this.state.data
         if(isLoading){
             return <h3>isLoading</h3>
         }
-        // console.log(comments)
         return (
             <div>
-                <div>
-                    <Comment.Group>
+                <Comment.Group>
                     <Header 
                         as='h3' dividing
                         className="Comments-Header"
-                    >
+                        >
                         Comments
                     </Header>
-                        {
-                            comments.map((c, index) => 
-                                <Comment
-                                key={index}
-                                >
-                                    <Comment.Content>
-                                        <Comment.Author>Hidden</Comment.Author>
-                                        <Comment.Metadata><div>{c.meta.date}</div></Comment.Metadata>
-                                        <Comment.Text>{c.body}</Comment.Text>
-                                    </Comment.Content>
-                                </Comment>
+                    {
+                        comments.map((c, index) => 
+                            <Comment
+                            key={index}
+                            >
+                                <Comment.Content>
+                                    <Comment.Author>Hidden</Comment.Author>
+                                    <Comment.Metadata><div>{c.meta.date}</div></Comment.Metadata>
+                                    <Comment.Text>{c.body}</Comment.Text>
+                                </Comment.Content>
+                            </Comment>
+                            )
+                    }
+                    <Form reply>
+                        <Form.TextArea 
+                        onChange = {
+                            (e) => {
+                                // console.log(e.target.value)
+                                this.setState(
+                                    {
+                                        userComment: e.target.value
+                                    }
                                 )
+                            }
                         }
-                        <Form reply>
-                            <Form.TextArea 
-                            onChange = {(e) => {this.setState({
-                                userComment: e.target.value
-                            })}}
-                            
-                            />
-                            <Button content='Add Reply' 
-                            labelPosition='left' 
-                            icon='edit'
-                            primary 
-                            onClick = {this.putComment}
-                            />
-                        </Form>
-                    </Comment.Group>
-                </div>
+                        id="commentTextArea"
+                        />
+                        <Button content='Add Reply' 
+                        labelPosition='left' 
+                        icon='edit'
+                        primary 
+                        onClick = {this.putComment}
+                        />
+                    </Form>
+                </Comment.Group>
                 <div>
+                    {
+                        this.state.socketComment.map(data =>
+                            <h1 key={data}>{data}</h1>
+                        )
+
+                    }
                 </div>
             </div>
         );

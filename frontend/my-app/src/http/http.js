@@ -8,7 +8,7 @@ const fetch = require('node-fetch');
 
 module.exports = {
     getTodaysFact: async function () {
-      return await fetch('http://192.168.0.195:8080/fact/get-todays-fact-populate-comment')
+      return await fetch('http://localhost:8080/fact/get-todays-fact-populate-comment')
       .then(body => body.json())
       .catch(err => {
             console.log(err)
@@ -26,7 +26,7 @@ module.exports = {
         },
         body: JSON.stringify(body)
       }
-      return await fetch('http://192.168.0.195:8080/fact/create-comment/' + factId, options)
+      return await fetch('http://localhost:8080/fact/create-comment/' + factId, options)
       .then(body => body.json())
       .catch(err => {
             console.log(err)
@@ -34,7 +34,16 @@ module.exports = {
       })
     },
     getComments: async function(factId){
-      return await fetch('http://192.168.0.195:8080/comment/find-comment-by-factid/' + factId)
+      return await fetch('http://localhost:8080/comment/find-comment-by-factid/' + factId)
+      .then(body => body.json())
+      .catch(err => {
+            console.log(err)
+            return "There is no fact today :("
+      })
+    },
+    getSocket: async function(){
+
+      return await fetch('http://localhost:8080/sockets/')
       .then(body => body.json())
       .catch(err => {
             console.log(err)

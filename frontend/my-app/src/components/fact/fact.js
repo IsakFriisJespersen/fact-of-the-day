@@ -34,7 +34,7 @@ class Fact extends React.Component {
             <div>
                 <div style={{width: 500}}>
                     <h2 style={{color: 'white'}}>Fact</h2>
-                    <p style={{color: 'white'}}>{data['fact']}</p>
+                    <h2 style={{color: 'white'}}>{data['fact']}</h2>
                 </div>
                 <Votes
                     votesUp = {data['meta']['votesUp']}
